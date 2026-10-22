@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Altovisio B2B Callback Assistant</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f6fb;
+      color: #17243b;
+    }
+    header {
+      background: #142d51;
+      color: white;
+      padding: 25px;
+      text-align: center;
+    }
+    main {
+      max-width: 750px;
+      margin: 30px auto;
+      padding: 0 18px;
+    }
+    .panel {
+      background: white;
+      padding: 25px;
+      border-radius: 14px;
+      box-shadow: 0 3px 15px #00000010;
+    }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-top: 16px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-top: 7px;
+      border: 1px solid #ccd4e0;
+      border-radius: 7px;
+      font: inherit;
+    }
+    textarea {
+      height: 230px;
+      resize: vertical;
+    }
+    button {
+      background: #195ca7;
+      color: white;
+      border: 0;
+      padding: 14px 18px;
+      border-radius: 8px;
+      margin-top: 18px;
+      cursor: pointer;
+      width: 100%;
+      font-weight: bold;
+    }
+    button:hover { background: #12487f; }
+    .note { color: #59677a; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Altovisio B2B Callback Assistant</h1>
+    <p>Professional Lead Follow-Up Script Generator</p>
+  </header>
+
+  <main>
+    <div class="panel">
+      <h2>Generate a Callback Script</h2>
+      <p class="note">
+        Enter contact details and select the lead situation.
+      </p>
+
+      <label for="contact">Contact Name</label>
+      <input id="contact" placeholder="Example: Michael">
+
+      <label for="company">Company Name</label>
+      <input id="company" placeholder="Example: ABC Tree Service">
+
+      <label for="status">Lead Situation</label>
+      <select id="status">
+        <option value="interested">Interested Prospect</option>
+        <option value="trial">Free Trial Follow-Up</option>
+        <option value="quality">Lead Quality Complaint</option>
+        <option value="paused">Paused Subscription</option>
+        <option value="form">Pending Registration Form</option>
+        <option value="renewal">Subscription Renewal</option>
+      </select>
+
+      <button onclick="generateScript()">
+        Generate Callback Script
+      </button>
+
+      <label for="output">Generated Script</label>
+      <textarea id="output" readonly
+        placeholder="Your script will appear here..."></textarea>
+
+      <button onclick="copyScript()">Copy Script</button>
+      <p id="message" class="note" role="status"></p>
+    </div>
+  </main>
+
+  <script>
+    function generateScript() {
+      const name =
+        document.getElementById("contact").value.trim()
+        || "there";
+      const company =
+        document.getElementById("company").value.trim();
+      const status =
+        document.getElementById("status").value;
+
+      const intro =
+        `Hey ${name}, this is Mark from AltaGrowth. `;
+
+      const scripts = {
+        interested:
+          `I wanted to follow up and see if you're still
+looking to bring in more jobs. What types of services
+and ZIP codes are you currently focusing on?`,
+
+        trial:
+          `I wanted to check how the free trial leads
+have been working out. Were you able to connect with
+the customers? I'd appreciate your feedback before
+we discuss the next step.`,
+
+        quality:
+          `I wanted to personally follow up on the
+concerns you shared about lead quality. Could you
+walk me through what happened? I'd like to review
+whether the leads meet our qualification and
+replacement criteria.`,
+
+        paused:
+          `I remember you wanted to pause receiving
+leads, and I respect that. I'm checking how your
+previous experience went, not calling to pressure
+you into restarting. Is this a good time to talk?`,
+
+        form:
+          `We previously discussed getting your free
+trial started. I wanted to check whether you still
+want to proceed, and whether anything about the
+registration process needs clarification.`,
+
+        renewal:
+          `I wanted to check how your previous leads
+performed. Before we discuss another package,
+I'd like to understand what worked well and
+what we could improve.`
+      };
+
+      const business = company
+        ? ` I'm following up regarding ${company}.`
+        : "";
+
+      const fullScript =
+        intro + business + "\n\n" + scripts[status];
+
+      document.getElementById("output").value =
+        fullScript;
+      document.getElementById("message").textContent =
+        "Script generated successfully.";
+    }
+
+    async function copyScript() {
+      const output = document.getElementById("output");
+      const message = document.getElementById("message");
+
+      if (!output.value) {
+        message.textContent = "Generate a script first.";
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(output.value);
+        message.textContent = "Script copied!";
+      } catch (error) {
+        output.select();
+        message.textContent =
+          "Select and copy the highlighted text manually.";
+      }
+    }
+  </script>
+</body>
+</html>
