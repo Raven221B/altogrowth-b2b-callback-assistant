@@ -1,191 +1,58 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Altovisio B2B Callback Assistant</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f3f6fb;
-      color: #17243b;
-    }
-    header {
-      background: #142d51;
-      color: white;
-      padding: 25px;
-      text-align: center;
-    }
-    main {
-      max-width: 750px;
-      margin: 30px auto;
-      padding: 0 18px;
-    }
-    .panel {
-      background: white;
-      padding: 25px;
-      border-radius: 14px;
-      box-shadow: 0 3px 15px #00000010;
-    }
-    label {
-      display: block;
-      font-weight: bold;
-      margin-top: 16px;
-    }
-    input, select, textarea {
-      width: 100%;
-      padding: 12px;
-      margin-top: 7px;
-      border: 1px solid #ccd4e0;
-      border-radius: 7px;
-      font: inherit;
-    }
-    textarea {
-      height: 230px;
-      resize: vertical;
-    }
-    button {
-      background: #195ca7;
-      color: white;
-      border: 0;
-      padding: 14px 18px;
-      border-radius: 8px;
-      margin-top: 18px;
-      cursor: pointer;
-      width: 100%;
-      font-weight: bold;
-    }
-    button:hover { background: #12487f; }
-    .note { color: #59677a; font-size: 14px; }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Altovisio B2B Callback Assistant</h1>
-    <p>Professional Lead Follow-Up Script Generator</p>
-  </header>
-
-  <main>
-    <div class="panel">
-      <h2>Generate a Callback Script</h2>
-      <p class="note">
-        Enter contact details and select the lead situation.
-      </p>
-
-      <label for="contact">Contact Name</label>
-      <input id="contact" placeholder="Example: Michael">
-
-      <label for="company">Company Name</label>
-      <input id="company" placeholder="Example: ABC Tree Service">
-
-      <label for="status">Lead Situation</label>
-      <select id="status">
-        <option value="interested">Interested Prospect</option>
-        <option value="trial">Free Trial Follow-Up</option>
-        <option value="quality">Lead Quality Complaint</option>
-        <option value="paused">Paused Subscription</option>
-        <option value="form">Pending Registration Form</option>
-        <option value="renewal">Subscription Renewal</option>
-      </select>
-
-      <button onclick="generateScript()">
-        Generate Callback Script
-      </button>
-
-      <label for="output">Generated Script</label>
-      <textarea id="output" readonly
-        placeholder="Your script will appear here..."></textarea>
-
-      <button onclick="copyScript()">Copy Script</button>
-      <p id="message" class="note" role="status"></p>
-    </div>
-  </main>
-
-  <script>
-    function generateScript() {
-      const name =
-        document.getElementById("contact").value.trim()
-        || "there";
-      const company =
-        document.getElementById("company").value.trim();
-      const status =
-        document.getElementById("status").value;
-
-      const intro =
-        `Hey ${name}, this is Mark from AltaGrowth. `;
-
-      const scripts = {
-        interested:
-          `I wanted to follow up and see if you're still
-looking to bring in more jobs. What types of services
-and ZIP codes are you currently focusing on?`,
-
-        trial:
-          `I wanted to check how the free trial leads
-have been working out. Were you able to connect with
-the customers? I'd appreciate your feedback before
-we discuss the next step.`,
-
-        quality:
-          `I wanted to personally follow up on the
-concerns you shared about lead quality. Could you
-walk me through what happened? I'd like to review
-whether the leads meet our qualification and
-replacement criteria.`,
-
-        paused:
-          `I remember you wanted to pause receiving
-leads, and I respect that. I'm checking how your
-previous experience went, not calling to pressure
-you into restarting. Is this a good time to talk?`,
-
-        form:
-          `We previously discussed getting your free
-trial started. I wanted to check whether you still
-want to proceed, and whether anything about the
-registration process needs clarification.`,
-
-        renewal:
-          `I wanted to check how your previous leads
-performed. Before we discuss another package,
-I'd like to understand what worked well and
-what we could improve.`
-      };
-
-      const business = company
-        ? ` I'm following up regarding ${company}.`
-        : "";
-
-      const fullScript =
-        intro + business + "\n\n" + scripts[status];
-
-      document.getElementById("output").value =
-        fullScript;
-      document.getElementById("message").textContent =
-        "Script generated successfully.";
-    }
-
-    async function copyScript() {
-      const output = document.getElementById("output");
-      const message = document.getElementById("message");
-
-      if (!output.value) {
-        message.textContent = "Generate a script first.";
-        return;
-      }
-
-      try {
-        await navigator.clipboard.writeText(output.value);
-        message.textContent = "Script copied!";
-      } catch (error) {
-        output.select();
-        message.textContent =
-          "Select and copy the highlighted text manually.";
-      }
-    }
-  </script>
-</body>
-</html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Altovisio | Lead Script Assistant</title>
+<style>
+:root{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:#e8edf8;background:#0b1220}*{box-sizing:border-box}body{margin:0}header{background:#111e34;border-bottom:1px solid #263954;padding:20px max(20px,calc((100vw - 1200px)/2))}h1{margin:0;font-size:23px}header p{margin:6px 0 0;color:#9facbf;font-size:13px}.wrap{max-width:1200px;margin:auto;padding:24px 18px 65px}.tabs{display:flex;gap:10px;margin-bottom:18px}.tab{border:1px solid #3b5070;border-radius:12px;background:#162640;color:#e8edf8;padding:13px 22px;font-weight:750;cursor:pointer}.tab.active{background:#3b76e7;border-color:#3b76e7}.layout{display:grid;grid-template-columns:minmax(320px,1fr) minmax(320px,1fr);gap:18px}.panel{padding:22px;background:#142239;border:1px solid #2a3b55;border-radius:16px;min-width:0}.panel h2{font-size:18px;margin:0 0 5px}.sub{color:#aab8cc;font-size:13px;margin:0 0 20px}.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.field{min-width:0}.field.wide{grid-column:1/-1}label{display:block;font-size:12px;font-weight:700;color:#c6d3e6;margin-bottom:6px}input,select,textarea{width:100%;font:inherit;background:#0d192c;border:1px solid #3a506d;border-radius:9px;padding:11px;color:#fff;outline-color:#79a7ff}textarea{min-height:80px;resize:vertical}input::placeholder,textarea::placeholder{color:#778ba6}.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin:18px 0}button{font:inherit;padding:11px 14px;font-weight:700;border-radius:9px;border:1px solid #42628e;background:#223958;color:#fff;cursor:pointer}button.primary{background:#4381ed;border-color:#4381ed}button:hover{filter:brightness(1.12)}.output{background:#091527;border-radius:12px;border:1px solid #294363;padding:17px;white-space:pre-wrap;line-height:1.6;font-size:14px;min-height:210px}.status{color:#9db5ce;font-size:12px;min-height:20px}.blockhead{font-size:13px;color:#b6c8de;font-weight:800;margin:18px 0 9px}.tip{font-size:12px;color:#9eafc6;line-height:1.55}.pill{display:inline-block;font-size:11px;padding:5px 9px;background:#253b5a;border-radius:50px;margin-right:5px}.footer{color:#8296ac;text-align:center;font-size:12px;padding:20px}.notice{background:#28351f;color:#d5efc2;border:1px solid #4a6340;border-radius:10px;padding:10px 12px;font-size:12px;margin-top:15px}@media(max-width:800px){.layout{grid-template-columns:1fr}.fields{grid-template-columns:1fr 1fr}.wrap{padding:16px 12px}.tab{padding:12px 13px;flex:1}}@media(max-width:480px){.fields{grid-template-columns:1fr}.tab{font-size:12px}}
+</style>
+</head><body>
+<header><h1>✦ Altovisio Lead Script Assistant</h1><p>B2C Lead Management &nbsp;•&nbsp; B2B Acquisition &nbsp;•&nbsp; Script and Qualification Workspace</p></header>
+<main class="wrap"><div class="tabs"><button class="tab active" id="b2cTab" type="button">🏠 B2C Lead Management</button><button class="tab" id="b2bTab" type="button">🤝 B2B Acquisition</button></div>
+<div class="layout"><section class="panel"><h2 id="formTitle">B2C Lead Qualification</h2><p class="sub" id="formSubtitle">Enter what is known. Unconfirmed fields stay unconfirmed.</p><div class="fields" id="fields"></div><div class="toolbar"><button id="clear" type="button">Clear fields</button><button id="export" type="button">Download qualification (.txt)</button></div><p class="tip">The app works entirely in your browser. No lead data is sent to GitHub or an AI service. Avoid entering sensitive information on public or shared devices.</p></section>
+<section class="panel"><h2>Script Generator</h2><p class="sub">Choose the purpose and communication channel, then generate a personalized script.</p><div class="fields"><div class="field wide"><label for="purpose">Conversation objective</label><select id="purpose"></select></div><div class="field"><label for="channel">Format</label><select id="channel"><option value="call">Phone call</option><option value="sms">SMS follow-up</option><option value="voicemail">Voicemail</option></select></div><div class="field"><label for="tone">Tone</label><select id="tone"><option value="friendly">Friendly professional</option><option value="concise">Short and direct</option></select></div><div class="field wide"><label for="objection">Lead objection (optional)</label><select id="objection"><option value="">None</option><option value="busy">I'm busy / not a good time</option><option value="notinterested">Not interested</option><option value="price">How much does it cost?</option><option value="badleads">Previous leads were poor quality</option><option value="later">Contact me later</option><option value="stop">Stop contacting me</option></select></div></div>
+<div class="toolbar"><button class="primary" id="generate" type="button">Generate script</button><button id="copy" type="button">Copy script</button><button id="copySummary" type="button">Copy qualification summary</button></div><div class="blockhead">Recommended script</div><div class="output" id="output" role="status" aria-live="polite">Fill in the details and select Generate script.</div><p class="status" id="status"></p><div class="blockhead">Lead qualification summary</div><div class="output" id="summary" style="min-height:150px"></div><div class="notice">Reminder: Use outreach only where appropriate consent or another lawful basis exists. Honor STOP, opt-outs and do-not-call requests. Confirm unknown facts rather than implying they were verified.</div></section></div></main><div class="footer">Altovisio Marketing & Growth Solutions • Version 1.0 • Static, no API required</div>
+<script>
+'use strict';
+const schemas={
+ b2c:{title:'B2C Lead Qualification',subtitle:'Homeowner contact, appointment, property and decision-maker verification.',fields:[
+ ['name','Lead / homeowner name','text'],['company','Your company name','text'],['agent','Team member name','text'],['phone','Callback number','tel'],['service','Requested service','select',['Tree removal','Tree trimming','Roofing','Gutter repair','Gutter cleaning','Electrical','Plumbing','Other']],['appointment','Appointment date and time','text'],['street','Street address and unit','text'],['city','City','text'],['state','State','text'],['zip','Property ZIP code','text'],['property','Property type / description','text'],['ownership','Ownership / occupancy','select',['Not confirmed','Owner occupied','Tenant occupied','Vacant','Other']],['decision','Decision maker / authorization','select',['Not confirmed','Yes — person contacted','No — another decision maker','Shared decision']],['decisionname','Other decision maker name','text'],['urgency','Timeline / urgency','select',['Not confirmed','Emergency','Within a week','Within a month','Planning ahead']],['notes','Prior conversation / additional details','textarea'] ],purposes:[['appointment','Appointment follow-up'],['contact','B2C contact information confirmation'],['property','Property information & address confirmation'],['decision','Decision-maker confirmation'],['qualify','General service qualification']]},
+ b2b:{title:'B2B Acquisition Qualification',subtitle:'Contractor job preferences, coverage ZIP codes and lead requirements.',fields:[
+ ['name','Contact person','text'],['company','Contractor / business name','text'],['agent','Acquisition rep name','text'],['phone','Callback number','tel'],['service','Service type(s) offered','text'],['jobs','Job types accepted','text'],['zip','Accepted ZIP codes (comma-separated)','text'],['area','Service areas / cities / counties','text'],['property','Ideal property types','text'],['excluded','Jobs / properties to avoid','text'],['capacity','Weekly job / lead capacity','text'],['radius','Travel radius / distance','text'],['leadtype','Preferred lead type','select',['Not confirmed','Quality lead','Verified lead','Appointment lead']],['price','Budget or price expectations','text'],['timeline','When ready to receive leads','select',['Not confirmed','Immediately','Next week','Next month','On hold']],['notes','Conversation history / additional details','textarea'] ],purposes:[['service','Service and job-type discovery'],['zip','ZIP codes and service-area confirmation'],['property','Ideal property / job requirements'],['capacity','Capacity and lead preferences'],['followup','B2B acquisition follow-up']]}
+};
+let mode='b2c';const $=id=>document.getElementById(id);const vals={b2c:{},b2b:{}};let generated='';
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function save(){document.querySelectorAll('#fields [data-field]').forEach(el=>vals[mode][el.dataset.field]=el.value);}
+function draw(){const cfg=schemas[mode];$('formTitle').textContent=cfg.title;$('formSubtitle').textContent=cfg.subtitle;
+ $('b2cTab').classList.toggle('active',mode==='b2c');$('b2bTab').classList.toggle('active',mode==='b2b');
+ $('fields').innerHTML=cfg.fields.map(([id,label,type,options])=>`<div class="field ${type==='textarea'?'wide':''}"><label for="f_${id}">${esc(label)}</label>${type==='textarea'?`<textarea id="f_${id}" data-field="${id}" placeholder="Enter notes or past conversation..."></textarea>`:type==='select'?`<select id="f_${id}" data-field="${id}">${options.map(o=>`<option value="${esc(o)}">${esc(o)}</option>`).join('')}</select>`:`<input id="f_${id}" data-field="${id}" type="${type}" placeholder="${esc(label)}">`}</div>`).join('');
+ document.querySelectorAll('#fields [data-field]').forEach(el=>{if(vals[mode][el.dataset.field]!==undefined)el.value=vals[mode][el.dataset.field];el.addEventListener('input',()=>{save();drawSummary();});el.addEventListener('change',()=>{save();drawSummary();});});
+ $('purpose').innerHTML=cfg.purposes.map(([v,l])=>`<option value="${v}">${esc(l)}</option>`).join('');$('output').textContent='Fill in the details and select Generate script.';$('status').textContent='';generated='';drawSummary();}
+const value=(key,fallback)=>{const x=(vals[mode][key]||'').trim();return x&&x!=='Not confirmed'?x:fallback;};
+function summaryText(){const cfg=schemas[mode];return `${mode.toUpperCase()} QUALIFICATION SUMMARY\n`+cfg.fields.map(([id,label])=>`${label}: ${value(id,'Not confirmed')}`).join('\n');}
+function drawSummary(){$('summary').textContent=summaryText();}
+function build(){save();const p=$('purpose').value,ch=$('channel').value,ob=$('objection').value,short=$('tone').value==='concise';const n=value('name','there'),org=value('company','our team'),agent=value('agent','a team member'),svc=value('service','the requested service'),address=[value('street',''),value('city',''),value('state',''),value('zip','')].filter(Boolean).join(', ');let ask='';
+if(mode==='b2c'){
+ const asks={appointment:`I'm following up about ${svc}. ${value('appointment','Do you have a preferred day and time for an appointment?')==='Do you have a preferred day and time for an appointment?'?'Do you have a preferred day and time for an appointment?':`I have ${value('appointment','')} in our notes. Does that time still work for you?`}`,
+ contact:`Could I confirm the best name and callback number for your service request? I have ${value('phone','no number confirmed')} as the callback number. Is that correct?`,
+ property:`To make sure our team has the right location, could you confirm the complete service address${address?' as '+address:''}, including any unit number, and tell me a little about the property?`,
+ decision:`Will you be the person approving the work, or will someone else also need to be part of the decision? ${value('decisionname','')?`Should we include ${value('decisionname','')} in the conversation?`:''}`,
+ qualify:`Could you tell me what service you need, the property address, and when you'd ideally like the work completed? Are you the person authorized to approve the work?`};ask=asks[p];
+}else{
+ const asks={service:`What types of ${svc==='the requested service'?'jobs':svc+' jobs'} are you currently accepting? Are there specific services or jobs you don't take?`,
+ zip:`Could you confirm the ZIP codes and cities you currently serve? I have ${value('zip','no ZIP codes recorded yet')} listed. Is that up to date?`,
+ property:`What is your ideal property and project? For example, residential versus commercial, job size, and any types you prefer to avoid.`,
+ capacity:`How many new opportunities could you handle weekly, and would you prefer quality leads, verified leads, or booked appointments?`,
+ followup:`Are you currently open to receiving additional ${value('jobs','service')} opportunities in ${value('area','your service area')}? I'd like to confirm your active ZIP codes and job preferences so we only discuss suitable opportunities.`};ask=asks[p];
+}
+let intro=ch==='call'?`Hi ${n}, this is ${agent} with ${org}. Is now a good time for a quick follow-up?`:ch==='sms'?`Hi ${n}, this is ${agent} with ${org}. `:`Hi ${n}, this is ${agent} with ${org}. I’m calling with a quick follow-up. `;
+let finish=ch==='call'?'Thanks. Let me repeat back what we confirm so I have it right. What would be the best next step for you?':ch==='sms'?'Feel free to reply when convenient.':'Please call us back at the number you normally use to reach our team. Thank you.';
+if(short){intro=ch==='call'?`Hi ${n}, ${agent} from ${org} here. `:`Hi ${n}, ${agent} with ${org}. `;finish=ch==='sms'?'Thanks!':'Thank you.';}
+const objections={busy:'Of course. Is there a better time for me to follow up?',notinterested:'Understood. I won’t push. Would you prefer no further follow-up?',price:'Pricing depends on the exact job and requirements. I can confirm the details and explain the available options without promising a price before it is verified.',badleads:'Thanks for sharing that. What specifically was not a good fit before—job type, location, contactability, or timing? I can document your criteria before discussing any new opportunities.',later:'No problem. What day and time would be best to reconnect?',stop:'Understood. I will mark your request to stop contact. No further outreach should be sent.'};
+if(ob==='stop'){generated=`${intro}Understood. We will stop contacting you.\n\nINTERNAL ACTION: Mark do-not-contact and suppress any future automated outreach.`;}
+else{generated=`${intro}${ask}\n\n${finish}${ob?`\n\nIF THEY OBJECT:\n${objections[ob]}`:''}`;}
+$('output').textContent=generated;$('status').textContent='Script generated. Review facts and consent before using.';}
+$('b2cTab').addEventListener('click',()=>{save();mode='b2c';draw();});$('b2bTab').addEventListener('click',()=>{save();mode='b2b';draw();});$('generate').addEventListener('click',build);
+async function copy(t){try{await navigator.clipboard.writeText(t);$('status').textContent='Copied to clipboard.';}catch{ $('status').textContent='Clipboard unavailable here. Select the text to copy manually.';}}
+$('copy').addEventListener('click',()=>copy(generated||$('output').textContent));$('copySummary').addEventListener('click',()=>copy(summaryText()));$('clear').addEventListener('click',()=>{vals[mode]={};draw();});$('export').addEventListener('click',()=>{save();const blob=new Blob([summaryText()],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`altovisio-${mode}-qualification.txt`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);});draw();
+</script></body></html>
