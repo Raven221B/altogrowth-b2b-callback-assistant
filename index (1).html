@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Altovisio | B2B Callback & Script Assistant V5</title>
+<style>
+:root{
+  --navy:#133f78;
+  --navy-deep:#0f2f5b;
+  --blue:#1f68d5;
+  --teal:#11b3b3;
+  --bg:#f4f8fc;
+  --card:#ffffff;
+  --line:#d9e4f0;
+  --text:#17314f;
+  --muted:#5f748e;
+  --danger-bg:#fff1ee;
+  --danger:#912f24;
+  --good-bg:#edf8f4;
+  --good:#1d6a52;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--text);
+  background:var(--bg);
+}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,#f8fbff 0%,#eef4fb 100%)}
+.header-wrap{background:linear-gradient(135deg,var(--navy-deep),var(--navy));color:#fff;padding:26px 18px 30px}
+.header-inner{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.logo-box{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);padding:10px 14px;border-radius:16px;backdrop-filter:blur(3px)}
+.logo-box img{display:block;max-width:360px;width:100%;height:auto}
+.hero-copy{flex:1;min-width:280px}
+.hero-copy h1{margin:0 0 8px;font-size:30px;line-height:1.15}
+.hero-copy p{margin:0;color:#dbe7f6;line-height:1.55}
+.badge-row{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}
+.badge{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);font-size:12px;color:#eef5ff}
+main{max-width:1180px;margin:22px auto;padding:0 18px 20px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 8px 25px rgba(14,47,91,.06);margin-bottom:18px}
+.card h2{margin:0 0 10px;font-size:20px;color:var(--navy-deep)}
+.card h3{margin:16px 0 8px;font-size:15px;color:var(--navy)}
+.brand-note{background:linear-gradient(90deg,rgba(31,104,213,.08),rgba(17,179,179,.08));border:1px solid #d9edf0;padding:12px 14px;border-radius:12px;margin-top:8px;color:var(--navy-deep);font-size:13px}
+label{display:block;font-weight:700;margin:13px 0 6px;color:var(--navy-deep)}
+input,textarea,select{width:100%;padding:12px 13px;border:1px solid #bfd0e2;border-radius:10px;font:inherit;color:var(--text);background:#fff}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(31,104,213,.12)}
+textarea{min-height:185px;resize:vertical;line-height:1.55}
+textarea.output{min-height:220px}
+button{background:linear-gradient(180deg,var(--blue),#1558bd);border:0;border-radius:10px;color:white;font:700 14px inherit;padding:12px 16px;cursor:pointer;margin:8px 8px 0 0;box-shadow:0 6px 14px rgba(31,104,213,.18)}
+button:hover{filter:brightness(.97)}
+button.secondary{background:#eaf0f8;color:var(--navy);box-shadow:none}
+button.accent{background:linear-gradient(180deg,var(--teal),#0f9a9a);box-shadow:0 6px 14px rgba(17,179,179,.18)}
+.muted{color:var(--muted);font-size:13px;line-height:1.55}
+.notice{background:#eef5fd;border:1px solid #d9e7f8;border-radius:12px;padding:14px;white-space:pre-wrap;line-height:1.65}
+.notice.danger{background:var(--danger-bg);border-color:#efc1b7;color:var(--danger)}
+.notice.good{background:var(--good-bg);border-color:#cce7da;color:var(--good)}
+.flex{display:flex;gap:12px;flex-wrap:wrap}.flex>*{flex:1}
+.smallfield{min-width:170px}
+.checkbox{display:flex;gap:8px;align-items:center;font-weight:600;color:var(--navy)}
+.checkbox input{width:auto;accent-color:var(--teal)}
+.chips{margin-top:8px}
+.chip{display:inline-block;background:#eaf2ff;color:var(--navy);padding:5px 10px;margin:4px 5px 0 0;border-radius:999px;font-size:12px;border:1px solid #d9e7fb}
+.footer{max-width:1180px;margin:4px auto 26px;padding:0 18px;color:var(--muted);font-size:12px;line-height:1.6}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+@media(max-width:840px){.grid{grid-template-columns:1fr}.hero-copy h1{font-size:24px}.logo-box img{max-width:300px}}
+
+.mode-switch{max-width:1180px;margin:20px auto 0;padding:0 18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.mode-switch button{border:1px solid #c4d8ec;background:#fff;color:var(--navy-deep);box-shadow:none;margin:0;padding:13px 22px;border-radius:12px}
+.mode-switch button[aria-pressed="true"]{background:var(--navy);color:#fff;border-color:var(--navy);box-shadow:0 5px 12px #0f2f5b2a}
+.mode-caption{color:var(--muted);font-size:13px}
+#b2cView[hidden],#b2bView[hidden]{display:none}
+.template-output{min-height:200px}
+.helper{border-left:4px solid var(--teal);padding:10px 13px;background:#eef9f9;border-radius:7px;color:#205867;margin-bottom:15px}
+.fieldcheck{display:flex;gap:9px;align-items:center;margin-top:13px;font-weight:600}
+.fieldcheck input{width:auto;accent-color:var(--teal)}
+</style>
+</head>
+<body>
+<header class="header-wrap">
+  <div class="header-inner">
+    <div class="logo-box">
+      <img src="altovisio-logo.png" alt="Altovisio Marketing & Growth Solutions logo">
+    </div>
+    <div class="hero-copy">
+      <h1>Altovisio B2B Callback & Script Assistant</h1>
+      <p>Review original text conversations and call transcriptions together, then generate a callback approach, objection responses, qualification questions, SMS follow-up, and CRM notes — using the Altovisio branded workspace.</p>
+      <div class="badge-row">
+        <span class="badge">Navy · Blue · Teal Brand Theme</span>
+        <span class="badge">B2B + B2C</span>
+        <span class="badge">Callback Scripts</span>
+        <span class="badge">SMS + CRM Notes</span>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="mode-switch" role="group" aria-label="Select assistant mode">
+  <button id="b2bMode" type="button" aria-pressed="true" onclick="switchMode('b2b')">B2B · Acquisition & Client Calls</button>
+  <button id="b2cMode" type="button" aria-pressed="false" onclick="switchMode('b2c')">B2C · Homeowner Lead Follow-Up</button>
+  <span class="mode-caption">Same published link · Two workspaces</span>
+</div>
+<main><div id="b2bView">
+  <section class="card">
+    <h2>1. Contact & lead context</h2>
+    <div class="brand-note">Brand styling note: this version uses your uploaded Altovisio logo and matches its navy, blue, and teal palette.</div>
+    <div class="flex">
+      <div class="smallfield"><label for="name">Contact name</label><input id="name" placeholder="e.g., Michael"></div>
+      <div class="smallfield"><label for="company">Business name</label><input id="company" placeholder="e.g., Sample Tree Service"></div>
+      <div class="smallfield"><label for="industry">Service type</label><select id="industry"><option>Tree Service</option><option>Landscaping</option><option>Roofing</option><option>Gutters</option><option>Windows & Siding</option><option>Other</option></select></div>
+    </div>
+    <div class="flex">
+      <div class="smallfield"><label for="stage">Current lead stage</label><select id="stage"><option value="interested">Interested prospect</option><option value="trial">Free trial (3 leads)</option><option value="quality">Lead quality complaint</option><option value="paused">Paused / not ready</option><option value="form">Pending registration</option><option value="renewal">Renewal / package discussion</option><option value="unresponsive">Unresponsive</option></select></div>
+      <div class="smallfield"><label for="zip">Target ZIP codes / service radius</label><input id="zip" placeholder="e.g., 06002 within 15 miles"></div>
+    </div>
+    <label class="checkbox"><input id="manualDnc" type="checkbox"> Mark contact as Do Not Contact / opted out</label>
+    <p class="muted">Use this whenever the contact asked to stop being contacted, even if the full opt-out is not pasted below.</p>
+  </section>
+
+  <div class="grid">
+    <section class="card">
+      <h2>2. Original text conversation</h2>
+      <p class="muted">Paste the original text or CRM conversation here. Keep the speaker names and dates if possible.</p>
+      <textarea id="chat" placeholder="MA: Hi Michael, would you like us to start sending leads again?&#10;AC: Not yet&#10;MA: No problem at all..."></textarea>
+      <div class="actions"><button class="secondary" type="button" onclick="loadFile('chat')">Import .txt</button></div>
+      <input type="file" id="chatFile" accept=".txt,text/plain" hidden onchange="readFile(this,'chat')">
+    </section>
+
+    <section class="card">
+      <h2>3. Call transcription</h2>
+      <p class="muted">Paste the call transcription here, including timestamps if available.</p>
+      <textarea id="call" placeholder="(0:01) Customer: Hello.&#10;(0:03) Agent: Hi, this is Mark...&#10;(1:22) Customer: The leads were not qualified..."></textarea>
+      <div class="actions"><button class="secondary" type="button" onclick="loadFile('call')">Import .txt</button></div>
+      <input type="file" id="callFile" accept=".txt,text/plain" hidden onchange="readFile(this,'call')">
+    </section>
+  </div>
+
+  <section class="card">
+    <h2>4. Review both sources together</h2>
+    <p class="muted">This is still a rule-based review, not full AI reasoning. Always verify the latest message, consent status, and actual lead details before contacting anyone.</p>
+    <div class="actions">
+      <button class="accent" onclick="review()">Review conversation + transcript</button>
+      <button class="secondary" onclick="clearInputs()">Clear all inputs</button>
+    </div>
+    <h3>Review findings</h3>
+    <div id="summary" class="notice" aria-live="polite">Paste a conversation and/or call transcript, then click Review.</div>
+    <div id="tags" class="chips"></div>
+  </section>
+
+  <section class="card">
+    <h2>5. Callback script</h2>
+    <div class="actions"><button onclick="makeCallback()">Generate callback</button><button class="secondary" onclick="copyBox('callback')">Copy</button></div>
+    <label for="callback">Recommended call approach</label>
+    <textarea id="callback" class="output" readonly></textarea>
+  </section>
+
+  <div class="grid">
+    <section class="card">
+      <h2>6. Objection responses</h2>
+      <label for="objection">Select objection</label>
+      <select id="objection">
+        <option value="bad">The leads were bad / not qualified</option>
+        <option value="answer">Nobody answered</option>
+        <option value="discount">Discounts caused unrealistic expectations</option>
+        <option value="cost">Price is too high</option>
+        <option value="trust">Your company seems sketchy</option>
+        <option value="fit">Wrong jobs / wrong areas</option>
+        <option value="pause">Not yet / too busy</option>
+        <option value="stop">Stop calling me</option>
+      </select>
+      <div class="actions"><button onclick="makeObjection()">Generate response</button><button class="secondary" onclick="copyBox('objectionOutput')">Copy</button></div>
+      <textarea id="objectionOutput" class="output" readonly></textarea>
+    </section>
+
+    <section class="card">
+      <h2>7. B2B qualification questions</h2>
+      <div class="actions"><button onclick="makeQuestions()">Generate questions</button><button class="secondary" onclick="copyBox('questions')">Copy</button></div>
+      <textarea id="questions" class="output" readonly></textarea>
+    </section>
+  </div>
+
+  <section class="card">
+    <h2>8. SMS follow-up</h2>
+    <label for="smsKind">Message type</label>
+    <select id="smsKind">
+      <option value="feedback">Ask for feedback</option>
+      <option value="trial">Free trial check-in</option>
+      <option value="appointment">Appointment / callback coordination</option>
+      <option value="form">Registration clarification</option>
+      <option value="paused">Paused prospect check-in (only if authorized)</option>
+    </select>
+    <div class="actions"><button onclick="makeSms()">Generate SMS</button><button class="secondary" onclick="copyBox('sms')">Copy</button></div>
+    <textarea id="sms" class="output" readonly></textarea>
+    <p class="muted">This tool does not send messages. Check consent, quiet hours, DNC records, and campaign requirements first.</p>
+  </section>
+
+  <section class="card">
+    <h2>9. CRM call notes</h2>
+    <div class="actions"><button onclick="makeNotes()">Generate notes</button><button class="secondary" onclick="copyBox('notes')">Copy</button></div>
+    <textarea id="notes" class="output" readonly></textarea>
+    <p class="muted">These are draft notes based on detected cues. Review before saving into GHL or any CRM.</p>
+  </section>
+
+  </div>
+<div id="b2cView" hidden>
+<section class="card">
+<h2>B2C · Customer Contact & Appointment Assistant</h2>
+<p class="helper">Use this workspace when contacting homeowners who have requested information or agreed to be contacted. First confirm consent and the service provider you represent. Record verified details rather than assuming them.</p>
+<div class="flex">
+ <div class="smallfield"><label for="bName">Customer full name</label><input id="bName" placeholder="e.g., Taylor Morgan"></div>
+ <div class="smallfield"><label for="bBusiness">Service company name</label><input id="bBusiness" placeholder="e.g., Local Tree Service"></div>
+ <div class="smallfield"><label for="bService">Requested service</label><select id="bService"><option>Tree Trimming</option><option>Tree Removal</option><option>Roofing</option><option>Gutter Service</option><option>Landscaping</option><option>Windows & Siding</option><option>Other Home Service</option></select></div>
+</div>
+<label for="bHistory">Previous text conversation / call notes</label>
+<textarea id="bHistory" placeholder="Paste an anonymized customer conversation or summary. Include missed appointments, customer availability, or opt-out requests."></textarea>
+<label class="fieldcheck"><input type="checkbox" id="bOptout"> Customer opted out / Do Not Contact</label>
+<label class="fieldcheck"><input type="checkbox" id="bConsent"> I have checked the applicable contact permission in our CRM</label>
+</section>
+<div class="grid">
+<section class="card"><h2>Verify Customer & Property</h2>
+<label for="bStreet">Street address and unit number</label><input id="bStreet" placeholder="123 Main St, Unit 2">
+<div class="flex">
+<div><label for="bCity">City</label><input id="bCity" placeholder="City"></div>
+<div><label for="bState">State</label><input id="bState" placeholder="State"></div>
+<div><label for="bZip">ZIP code</label><input id="bZip" placeholder="ZIP code"></div>
+</div>
+<label for="bBudget">Customer's stated budget (if shared)</label><input id="bBudget" placeholder="e.g., $1,500–$2,000 / Not provided">
+<label for="bDecision">Decision maker / other approvers</label><input id="bDecision" placeholder="e.g., Homeowner; spouse also approves">
+</section>
+<section class="card"><h2>Appointment & Availability</h2>
+<label for="bPreferred">Customer's preferred appointment window</label><input id="bPreferred" placeholder="e.g., weekday afternoons">
+<label for="bDate">Confirmed appointment date</label><input id="bDate" type="date">
+<label for="bTime">Confirmed appointment time</label><input id="bTime" type="time">
+<label for="bZone">Appointment time zone</label><input id="bZone" placeholder="e.g., America/Chicago (CDT/CST)">
+<label for="bRep">Assigned estimator / service representative</label><input id="bRep" placeholder="e.g., John">
+<p class="muted">Appointment fields document agreed details. This page does not access or book a calendar.</p>
+</section>
+</div>
+<section class="card"><h2>Generate B2C Call Script</h2>
+<label for="bScenario">Call reason</label><select id="bScenario">
+<option value="initial">Initial contact with lead</option>
+<option value="verify">Verify name, address, budget & decision maker</option>
+<option value="book">Set an estimate / appointment</option>
+<option value="missed">Customer missed appointment (no-show)</option>
+<option value="follow">Callback after unsuccessful contact attempt</option>
+<option value="confirm">Confirm upcoming appointment</option>
+<option value="reschedule">Reschedule an appointment</option>
+</select>
+<div class="actions"><button class="accent" onclick="makeB2CCall()">Generate B2C Call Script</button><button class="secondary" onclick="copyBox('bCall')">Copy Script</button></div>
+<label for="bCall">Suggested phone conversation</label><textarea id="bCall" class="output" readonly></textarea>
+</section>
+<section class="card"><h2>Appointment Reminder & Follow-Up SMS</h2>
+<label for="bMessageType">Message option</label><select id="bMessageType">
+<option value="first">Initial inquiry follow-up</option>
+<option value="verified">Request missing name / address details</option>
+<option value="booked">Booking confirmation</option>
+<option value="day">Reminder — 1 day before</option>
+<option value="four">Reminder — 4 hours before</option>
+<option value="one">Reminder — 1 hour before</option>
+<option value="missed">Customer no-show — reschedule request</option>
+<option value="callback">No answer — permission-based callback request</option>
+</select>
+<div class="actions"><button onclick="makeB2CSms()">Generate B2C SMS</button><button class="secondary" onclick="copyBox('bSms')">Copy SMS</button></div>
+<label for="bSms">SMS draft</label><textarea id="bSms" class="output" readonly></textarea>
+<p class="muted">These are manual templates, not scheduled reminders. Do not send without appropriate messaging consent. Verify appointment timing and time zone first.</p>
+</section>
+<section class="card"><h2>Qualification & CRM Notes</h2>
+<div class="actions"><button onclick="makeB2CQuestions()">Generate Qualification Questions</button><button class="secondary" onclick="copyBox('bQuestions')">Copy Questions</button></div>
+<label for="bQuestions">Questions to ask the customer</label><textarea id="bQuestions" class="output" readonly></textarea>
+<div class="actions"><button onclick="makeB2CNotes()">Generate CRM Notes</button><button class="secondary" onclick="copyBox('bNotes')">Copy Notes</button></div>
+<label for="bNotes">Structured lead record</label><textarea id="bNotes" class="output" readonly></textarea>
+<p class="muted">The notes are a draft. Confirm every field directly with the customer before saving to GHL.</p>
+</section>
+</div>
+<p id="feedback" class="muted" role="status"></p>
+</main>
+<div class="footer">Version 5 · Altovisio branded edition · Runs locally in your browser · No API required. If you use this in a public GitHub Pages site, avoid pasting sensitive customer information on shared devices.</div>
+<script>
+const el=id=>document.getElementById(id), val=id=>el(id).value.trim();
+function loadFile(type){ el(type+'File').click(); }
+function readFile(input,target){ const file=input.files[0]; if(!file) return; const reader=new FileReader(); reader.onload=e=>{ el(target).value=e.target.result || ''; }; reader.readAsText(file); }
+function clearInputs(){ ['chat','call','callback','objectionOutput','questions','sms','notes'].forEach(id=>el(id).value=''); el('summary').textContent='Paste a conversation and/or call transcript, then click Review.'; el('summary').className='notice'; el('tags').innerHTML=''; el('feedback').textContent='Cleared.'; }
+function contactName(){ return val('name') || 'there'; }
+function detect(){
+ const text=[val('chat'),val('call')].join('\n').toLowerCase();
+ const has=re=>re.test(text);
+ return {
+  dnc:el('manualDnc').checked || has(/(stop calling me|stop texting me|do not contact me|don't contact me|take me off your list|remove me from your list|put me on (the )?do not call|unsubscribe)/i),
+  bad:has(/(bad leads?|leads? (weren't|were not|wasn't|was not) good|unqualified|not qualified|nobody wanted the work|didn.t want the work)/i),
+  contact:has(/(no answer|not answer|nobody answered|never (called|messaged|responded)|voicemail|no one (came out|showed up))/i),
+  discount:has(/(discounts?|cheap(er|est)?|under cost|budget|too expensive|cost too much|price)/i),
+  trust:has(/(sketchy|scam|deceptive|bait and switch|harass|don't trust|do not trust)/i),
+  timing:has(/(not yet|paused?|slowing down|slow down|later|not ready|too busy)/i),
+  booking:has(/(appointment|estimate|schedule|site visit|showed up|went there)/i),
+  pricing:has(/(package|weekly rate|pay per lead|per lead|contract|closed the job|pay for)/i),
+  geo:has(/(zip ?code|miles? around|service area|radius)/i)
+ };
+}
+function review(){
+ const flags=detect();
+ if(!val('chat')&&!val('call')){ el('summary').textContent='No source text yet. Paste the original text conversation, call transcription, or both.'; el('tags').innerHTML=''; return; }
+ const lines=[];
+ if(flags.dnc) lines.push('DO NOT CONTACT: An opt-out phrase was detected or the record was manually flagged DNC. Do not generate or send promotional callbacks or SMS until the record is reviewed and suppressed as needed.');
+ const mapping=[['bad','Lead qualification concerns'],['contact','Customer contactability issues'],['discount','Pricing, budget, or discount expectations'],['trust','Trust or outreach transparency concerns'],['timing','Timing or paused-service concerns'],['booking','Estimate / appointment discussion'],['pricing','Package or payment model discussion'],['geo','ZIP / radius discussion']];
+ for(const [key,label] of mapping){ if(flags[key]) lines.push('Possible topic: '+label+'.'); }
+ lines.push('Action: Compare what the customer actually said with what your team promised. Verify dates, lead status, consent, and replacement rules before any next step.');
+ if(!flags.dnc) lines.push('No explicit opt-out matched by this basic scanner. This does not confirm calling or texting permission.');
+ el('summary').textContent=lines.join('\n');
+ el('summary').className='notice'+(flags.dnc?' danger':'');
+ el('tags').innerHTML='';
+ for(const [key,label] of mapping){ if(flags[key]){ const span=document.createElement('span'); span.className='chip'; span.textContent=label; el('tags').appendChild(span); } }
+ if(flags.dnc){ el('callback').value='DO NOT CALL: This record contains an opt-out request or is manually flagged DNC. Update the CRM and do not place a marketing callback.'; el('sms').value='NO SMS: Contact is flagged Do Not Contact.'; }
+}
+const stages={
+ interested:'You mentioned wanting additional jobs. Are you still looking for leads, and which job types and service areas are the best fit for your business?',
+ trial:'I wanted to understand how the trial leads performed. Which customers did you reach, and what would make a trial lead useful to you?',
+ quality:'I am calling to understand what was wrong with the prior leads. Were people not ready, outside your area, or expecting a price you could not offer? We can review against the agreed replacement policy.',
+ paused:'I respect that you previously said you were not ready. I wanted to understand your prior experience, not pressure you to restart. Is now an okay time for a quick feedback call?',
+ form:'I wanted to check whether you still wish to complete the trial setup and whether any part of the form or trial conditions needs clarification.',
+ renewal:'Before discussing another package, I would like to understand which prior leads were useful and what needs improvement.',
+ unresponsive:'I wanted to confirm whether your earlier inquiry is still active. If not, I can close it out so we do not keep following up.'
+};
+function makeCallback(){
+ const f=detect();
+ if(f.dnc){ el('callback').value='DO NOT CALL: This record contains an opt-out request or is manually flagged DNC. Update the CRM and do not place a marketing callback.'; return; }
+ const parts=[`Hi ${contactName()}, this is Mark from AltaGrowth. Is this an appropriate time for a quick call?`, stages[val('stage')]];
+ if(f.bad) parts.push('I saw concerns about lead qualification. Which specific leads failed your requirements, and why?');
+ if(f.discount) parts.push('I also want to clarify any pricing or discount expectations. We should not advertise discounts your company has not approved.');
+ if(f.contact) parts.push('Were the customers unreachable, or did they say they were no longer interested?');
+ if(f.trust) parts.push('I understand your concern about transparency. We can explain the documented outreach and qualification process clearly.');
+ parts.push('What would you consider a qualified lead?','[Pause. Listen and take notes.]','Thanks for the feedback. I will verify the next step and follow up only as agreed.');
+ el('callback').value=parts.join('\n\n');
+}
+function makeObjection(){
+ const responses={
+  bad:'I understand. Could you walk me through what happened with each lead? I will review the qualification evidence and the agreed replacement criteria rather than assume they were all valid.',
+  answer:'That is frustrating. Can we confirm when contact was attempted and whether those customers are still expecting a call? We should avoid repeated unwanted calls.',
+  discount:'That is a fair concern. We should not create unrealistic expectations or imply discounts you have not approved. Let us review exactly what was said before providing more leads.',
+  cost:'I understand. What type of job value and qualification standard would make a lead package worthwhile for your business?',
+  trust:'I hear your concern. You deserve clarity about how interest was obtained, what customers were told, and what we verify before delivering a lead. Which part would you like us to explain first?',
+  fit:'What services, minimum job sizes, ZIP codes, and travel radius do you prefer so we can evaluate whether our lead criteria align?',
+  pause:'Understood. I respect the pause. Would you rather reach out when you are ready?',
+  stop:'Understood. We will stop contacting you about this offer and update our suppression records.'
+ };
+ el('objectionOutput').value=responses[val('objection')];
+}
+function makeQuestions(){
+ const industry=(val('industry')||'service').toLowerCase();
+ const list=[
+  `1. What types of ${industry} jobs are you actively looking for right now?`,
+  '2. Which ZIP codes, cities, or neighborhoods do you prefer?',
+  '3. What is your maximum service radius or drive time?',
+  '4. What is the minimum job size or value worth your time?',
+  '5. Are you looking for estimate requests, booked appointments, or closed-job opportunities?',
+  '6. How quickly can your team follow up with a new lead?',
+  '7. Have you bought leads before? What worked and what did not?',
+  '8. Do you want us to avoid discount-heavy messaging or certain offer language?',
+  '9. How many leads can you realistically handle each week?',
+  '10. What should qualify a lead for replacement?'
+ ];
+ el('questions').value=list.join('\n\n');
+}
+function makeSms(){
+ const f=detect();
+ if(f.dnc){ el('sms').value='NO SMS: Contact is flagged Do Not Contact.'; return; }
+ const name=contactName();
+ const messages={
+  feedback:`Hey ${name}, this is Mark from AltaGrowth. I wanted to check how your experience with the leads has been. When you have a moment, I’d appreciate your feedback.`,
+  trial:`Hey ${name}, this is Mark from AltaGrowth. Just checking how the trial leads worked out and whether any of them matched what you were looking for.`,
+  appointment:`Hey ${name}, this is Mark from AltaGrowth. I wanted to follow up on the lead discussion and coordinate a good time to reconnect.`,
+  form:`Hey ${name}, this is Mark from AltaGrowth. Just checking whether you still want to complete the trial setup. I’m happy to clarify anything in the form.`,
+  paused:`Hey ${name}, this is Mark from AltaGrowth. I understand you wanted to pause for now. No pressure — if you ever want to share feedback or reconnect later, I’m here.`
+ };
+ el('sms').value=messages[val('smsKind')];
+}
+function makeNotes(){
+ const f=detect();
+ const items=[];
+ if(val('company')) items.push(`Business: ${val('company')}`);
+ if(val('zip')) items.push(`Area: ${val('zip')}`);
+ items.push(`Stage: ${el('stage').options[el('stage').selectedIndex].text}`);
+ if(f.dnc) items.push('ALERT: Potential DNC / opt-out detected. Review suppression before any outreach.');
+ if(f.bad) items.push('Customer raised lead quality / qualification concerns.');
+ if(f.contact) items.push('Customer mentioned no answers, voicemail, or missed response issues.');
+ if(f.discount) items.push('Budget, pricing, or discount expectations discussed.');
+ if(f.trust) items.push('Customer raised trust, sketchy outreach, or transparency concerns.');
+ if(f.geo) items.push('Service area / ZIP code preferences were discussed.');
+ if(f.pricing) items.push('Package, pay-per-lead, or pricing model was discussed.');
+ items.push('Next step: verify notes against the full conversation before saving in CRM.');
+ el('notes').value=items.map((x,i)=>`${i+1}. ${x}`).join('\n');
+}
+async function copyBox(id){
+ const text=el(id).value.trim();
+ if(!text){ el('feedback').textContent='Generate the content first.'; return; }
+ try{ await navigator.clipboard.writeText(text); el('feedback').textContent='Copied to clipboard.'; }
+ catch{ el(id).select(); el('feedback').textContent='Text selected. Press Ctrl+C to copy.'; }
+}
+
+function switchMode(mode){
+ const isB2C=mode==='b2c';
+ el('b2bView').hidden=isB2C;
+ el('b2cView').hidden=!isB2C;
+ el('b2bMode').setAttribute('aria-pressed',String(!isB2C));
+ el('b2cMode').setAttribute('aria-pressed',String(isB2C));
+ document.title=`Altovisio | ${isB2C?'B2C':'B2B'} Callback & Script Assistant V5`;
+}
+const bVal=id=>val(id);
+function bNoContact(){
+ const history=bVal('bHistory').toLowerCase();
+ return el('bOptout').checked || /\b(stop calling me|stop texting me|do not contact me|don't contact me|take me off your list|remove me from your list|unsubscribe)\b/i.test(history);
+}
+function bGate(target){
+ if(bNoContact()) {el(target).value='DO NOT CONTACT: An opt-out request is present. Do not call or text. Update the suppression status in your CRM.';return false;}
+ if(!el('bConsent').checked){el(target).value='CHECK CONTACT PERMISSION: Verify consent and contact preferences in GHL before preparing outreach. Then tick the permission check box.';return false;}
+ return true;
+}
+function bCustomer(){return bVal('bName')||'[customer name]'}
+function bProvider(){return bVal('bBusiness')||'[service company]'}
+function bDateTime(){
+ const d=bVal('bDate'),t=bVal('bTime'),z=bVal('bZone');
+ if(!d||!t||!z)return '[confirmed appointment date, time and time zone]';
+ const [y,m,day]=d.split('-');const [hour,min]=t.split(':');
+ const h=Number(hour);return `${m}/${day}/${y} at ${h%12||12}:${min} ${h>=12?'PM':'AM'} (${z})`;
+}
+function bAddress(){return [bVal('bStreet'),bVal('bCity'),bVal('bState'),bVal('bZip')].filter(Boolean).join(', ')||'[property address]'}
+function makeB2CCall(){
+ if(!bGate('bCall'))return;
+ const n=bCustomer(),co=bProvider(),service=bVal('bService'),appt=bDateTime();
+ const intro=`Hello, may I speak with ${n}? Hi, this is [agent name] calling on behalf of ${co} about your ${service.toLowerCase()} inquiry. Is now a good time to talk?`;
+ const options={
+ initial:`I wanted to learn what work you're considering and whether an estimate would be helpful. Could you describe the issue and when you hope to get the work done?\n\nBefore scheduling, may I confirm your name and the property address? What budget range, if any, have you set aside? If you're not sure, that's completely fine. Who else would need to approve the work?`,
+ verify:`For accuracy, can I confirm your full name and the service property address? I currently have: ${bAddress()}. Is that correct, including any unit number?\n\nWhat work do you want done? Do you have a budget range in mind, or would you prefer an estimate first? Are you the person who can approve the project, or should another decision maker join the appointment?`,
+ book:`To make sure the estimator can help, let's confirm the service needed, property address (${bAddress()}), and whether the decision maker can attend. What day and time are best for you? You mentioned ${bVal('bPreferred')||'[preferred availability]'}.\n\nI will check the schedule and confirm the actual booking before saying it's reserved.`,
+ missed:`I'm calling because our records show an appointment scheduled for ${appt}, but we weren't able to complete the visit. I wanted to make sure everything is okay. Did something come up, or was there a scheduling mix-up?\n\nIf you're still interested, what day and time would work better? I can check availability. No problem if you no longer need the service.`,
+ follow:`We attempted to reach you regarding your ${service.toLowerCase()} inquiry but couldn't connect. Are you still interested in discussing an estimate? If yes, what's the best time to call you back?`,
+ confirm:`I'm checking your upcoming ${service.toLowerCase()} appointment with ${co}, scheduled for ${appt} at ${bAddress()}. Does that still work for you? Will the person authorized to approve the work be present?`,
+ reschedule:`I'm following up about the appointment currently noted for ${appt}. Do you need to reschedule? What alternative day and time would work for you? I'll verify availability before confirming a new appointment.`
+ };
+ el('bCall').value=[intro,options[bVal('bScenario')],'[Pause and listen. Confirm what the customer actually agrees to. Do not promise a discount or a booked slot without approval.]'].join('\n\n');
+}
+function makeB2CSms(){
+ if(!bGate('bSms'))return;
+ const n=bCustomer(),co=bProvider(),svc=bVal('bService'),date=bDateTime(),address=bAddress();
+ const intro=`Hi ${n}, this is [agent name] with ${co}. `;
+ const options={
+ first:`Following up on your ${svc.toLowerCase()} inquiry. Is there a good time for a quick call to discuss what you need?`,
+ verified:`To help with your ${svc.toLowerCase()} estimate, could you confirm your full name and service address? Please share only what you're comfortable sending by text.`,
+ booked:`Your ${svc.toLowerCase()} appointment is confirmed for ${date} at ${address}. Please reply if any details need to be corrected.`,
+ day:`Friendly reminder for your ${svc.toLowerCase()} appointment scheduled for ${date} at ${address}. Please let us know if anything has changed.`,
+ four:`Reminder for your ${svc.toLowerCase()} appointment scheduled for ${date}. Please reply if you need to reschedule.`,
+ one:`Reminder for your ${svc.toLowerCase()} appointment scheduled for ${date}. Please let us know if there's a problem.`,
+ missed:`We weren't able to complete the appointment scheduled for ${date}. Are you still interested in an estimate? We can check another time that works for you.`,
+ callback:`We tried reaching you about your ${svc.toLowerCase()} inquiry. If you're still interested, what time would be convenient for a call?`
+ };
+ const type=bVal('bMessageType');
+ if(['booked','day','four','one'].includes(type)&&(!bVal('bDate')||!bVal('bTime')||!bVal('bZone'))){el('bSms').value='Enter the confirmed appointment date, time, and time zone before generating this reminder.';return;}
+ el('bSms').value=intro+options[type]+' Reply STOP to opt out.';
+}
+function makeB2CQuestions(){
+ const questions=[
+ '1. May I confirm your full name and the best callback number?',
+ `2. What ${bVal('bService').toLowerCase()} work do you need done?`,
+ '3. Can you confirm the property street address, unit number, city, state, and ZIP?',
+ '4. Are you the owner or otherwise authorized to request service at the property?',
+ '5. What is your ideal timeline for completing this work?',
+ '6. Do you have a budget range in mind? It is okay if you need an estimate first.',
+ '7. Who will make the final decision about approving the work?',
+ '8. Can that decision maker attend the estimate or appointment?',
+ '9. Which date and time window are most convenient for you?',
+ '10. May we send you appointment details and reminders by text? (Record the response and follow applicable consent rules.)',
+ '11. Are there access instructions, pets, gates, or other site details the estimator should know?'
+ ];
+ el('bQuestions').value=questions.join('\n\n');
+}
+function makeB2CNotes(){
+ const fields=[
+ ['Contact',bVal('bName')],['Service provider',bVal('bBusiness')],['Requested service',bVal('bService')],
+ ['Service address',bAddress()],['Budget (unverified unless confirmed)',bVal('bBudget')],
+ ['Decision maker (unverified unless confirmed)',bVal('bDecision')],['Preferred window',bVal('bPreferred')],
+ ['Scheduled appointment (verify booking)',bVal('bDate')&&bVal('bTime')&&bVal('bZone')?bDateTime():'Not confirmed'],
+ ['Assigned representative',bVal('bRep')],['Consent checked by agent',el('bConsent').checked?'Yes':'No'],
+ ['DNC indication',bNoContact()?'YES — suppress outreach':'No matched phrase; verify CRM'],
+ ['Next step','Verify all captured information, attendance, actual calendar booking and permission status.']
+ ];
+ el('bNotes').value=fields.map(([k,v])=>`${k}: ${v||'Not provided'}`).join('\n');
+}
+</script>
+</body>
+</html>
